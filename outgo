@@ -1,0 +1,15 @@
+outgo
+
+outgo -d "almuerzo, milanesa con ensalada" -c 40 -t almuerzo, comida
+outgo -d "pasajes a concordia" -c 600 -t pasajes,viaje,concordia,anto
+
+
+Gasto:
+string, descripcion
+int costo
+date fecha
+Tag tags[]
+
+Tag:
+string descripcion
+Tag hijos[]

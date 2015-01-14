@@ -24,29 +24,36 @@ class Outgo(object):
 		dic["tags"] = self.tags
 		return dic
 
-def getCertificate():
-	f = []
-	for line in open("CONFIG.dat"):
-		f.append(line)
-	return line.split(',')
+
+
+class Base(object):
+	def __init__(self):
+		self.user, seflpass = user , password = self.getCertificate()
+		self.url = "mongodb://" + str(user) + ":" + str(password) + "@ds029541.mongolab.com:29541/outgodb"
+		self.mongo_client = pymongo.MongoClient(self.url)
+		self.db = self.mongo_client.outgodb
+
+	def getCertificate(self):
+		f = []
+		for line in open("CONFIG.dat"):
+			f.append(line)
+		return line.split(',')
+
+	def add_outgo(self,outgo):
+		self.db.outgoes.insert(outgo.to_dic())
+
+
 
 def main():
 	print "arranca"
-	user , password = getCertificate()
-	url = "mongodb://" + str(user) + ":" + str(password) + "@ds029541.mongolab.com:29541/outgodb"
-	print url
-	clientDB = pymongo.MongoClient(url)
-	db = clientDB.outgodb
+	base = Base()
 
 	o = Outgo("almuerzo chino", 33, datetime.datetime.utcnow(), ["almuerzo","comida"] )
-	dic = o.to_dic()
+	base.add_outgo(o)
 
-	outgoes = db.outgoes
-	outgoes.insert(dic)
-
-	found_doc = outgoes.find_one(dic)
-	print "encontre este documento :" + str(found_doc)
-	print "documentos en la base :" + str(outgoes.count())
+	#found_doc = base.db.outgoes.find_one(o.to_dic)
+	#print "encontre este documento :" + str(found_doc)
+	print "documentos en la base :" + str(base.db.outgoes.count())
 
 
 	print "termina"

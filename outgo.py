@@ -42,6 +42,9 @@ class Base(object):
 	def add_outgo(self,outgo):
 		self.db.outgoes.insert(outgo.to_dic())
 
+	def find_outgo(self,outgo):
+		return self.db.outgoes.find_one(outgo.to_dic())
+
 
 
 def main():
@@ -51,8 +54,8 @@ def main():
 	o = Outgo("almuerzo chino", 33, datetime.datetime.utcnow(), ["almuerzo","comida"] )
 	base.add_outgo(o)
 
-	#found_doc = base.db.outgoes.find_one(o.to_dic)
-	#print "encontre este documento :" + str(found_doc)
+	
+	print "encontre este documento :" + str(base.find_outgo(o))
 	print "documentos en la base :" + str(base.db.outgoes.count())
 
 

@@ -1,5 +1,6 @@
 import pymongo
 import datetime
+import sys
 
 
 class Outgo(object):
@@ -11,7 +12,7 @@ class Outgo(object):
 		self.tags = tags
 
 	def __str__(self):
-		return "Gasto de " + str(cost) + "en " + str(desc)
+		return "Gasto de " + str(self.cost) + " en " + str(self.desc)
 
 	def add_tag(self,tag):
 		self.tags.append(tag)
@@ -47,16 +48,53 @@ class Base(object):
 
 
 
+class Program(object):
+
+	def __init__(self):
+		self.base = Base()
+		self.argv = sys.argv
+
+
+
+	def parameter_disclaimer(self):
+		if "new" in self.argv:
+			parameters = self.get_new_outgo_parameters()
+			o = Outgo(parameters["desc"], parameters["cost"], datetime.datetime.utcnow(), parameters["tags"])
+			print str(o)
+			self.base.add_outgo(o)
+
+
+	def get_new_outgo_parameters(self):
+		if "-d" in self.argv and "-c" in self.argv and "-t" in self.argv:
+			parameters={}
+			index_new_outgo_desc = self.argv.index("-d") + 1
+			parameters["desc"] = self.argv[index_new_outgo_desc]
+			index_new_outgo_cost = self.argv.index("-c") + 1
+			parameters["cost"] = self.argv[index_new_outgo_cost]
+			index_new_outgo_tags = self.argv.index("-t") + 1
+			string_tags = self.argv[index_new_outgo_tags]
+			parameters["tags"] = string_tags.split(",")
+			return parameters
+
+
+
+
 def main():
 	print "arranca"
-	base = Base()
+	program = Program()
+	print sys.argv
 
-	o = Outgo("almuerzo chino", 33, datetime.datetime.utcnow(), ["almuerzo","comida"] )
-	base.add_outgo(o)
+	if len(sys.argv) > 1:
+		program.parameter_disclaimer()
+		new_outgo_parameters = program.get_new_outgo_parameters()
+
+		print new_outgo_parameters
+	#o = Outgo("almuerzo chino", 33, datetime.datetime.utcnow(), ["almuerzo","comida"] )
+	#base.add_outgo(o)
 
 	
-	print "encontre este documento :" + str(base.find_outgo(o))
-	print "documentos en la base :" + str(base.db.outgoes.count())
+	#print "encontre este documento :" + str(base.find_outgo(o))
+	#print "documentos en la base :" + str(base.db.outgoes.count())
 
 
 	print "termina"

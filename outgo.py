@@ -62,6 +62,12 @@ class Program(object):
 			o = Outgo(parameters["desc"], parameters["cost"], datetime.datetime.utcnow(), parameters["tags"])
 			print str(o)
 			self.base.add_outgo(o)
+		
+		if "query" in self.argv:
+			#OBTENER LOS PARAMETROS DESDE ARGV
+			o = Outgo()
+			self.base.find_outgo(o)
+
 
 
 	def get_new_outgo_parameters(self):
@@ -75,6 +81,8 @@ class Program(object):
 			string_tags = self.argv[index_new_outgo_tags]
 			parameters["tags"] = string_tags.split(",")
 			return parameters
+		else:
+			print "There are some parameters missing."
 
 
 
@@ -87,14 +95,7 @@ def main():
 	if len(sys.argv) > 1:
 		program.parameter_disclaimer()
 		new_outgo_parameters = program.get_new_outgo_parameters()
-
 		print new_outgo_parameters
-	#o = Outgo("almuerzo chino", 33, datetime.datetime.utcnow(), ["almuerzo","comida"] )
-	#base.add_outgo(o)
-
-	
-	#print "encontre este documento :" + str(base.find_outgo(o))
-	#print "documentos en la base :" + str(base.db.outgoes.count())
 
 
 	print "termina"

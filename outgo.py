@@ -14,10 +14,10 @@ class Outgo(object):
 	def __str__(self):
 		return "Gasto de " + str(self.cost) + " en " + str(self.desc)
 
-	def add_tag(self,tag):
+	def addTag(self,tag):
 		self.tags.append(tag)
 
-	def to_dic(self):
+	def toDic(self):
 		dic = {}
 		dic["description"] = self.desc
 		dic["cost"] = self.cost
@@ -40,11 +40,11 @@ class Base(object):
 			f.append(line)
 		return line.split(',')
 
-	def add_outgo(self,outgo):
-		self.db.outgoes.insert(outgo.to_dic())
+	def addOutgo(self,outgo):
+		self.db.outgoes.insert(outgo.toDic())
 
-	def find_outgo(self,outgo):
-		return self.db.outgoes.find_one(outgo.to_dic())
+	def findOutgo(self,outgo):
+		return self.db.outgoes.find_one(outgo.toDic())
 
 
 
@@ -54,23 +54,18 @@ class Program(object):
 		self.base = Base()
 		self.argv = sys.argv
 
-
-
-	def parameter_disclaimer(self):
+	def parameterDisclaimerFromInput(self):
 		if "new" in self.argv:
-			parameters = self.get_new_outgo_parameters()
-			o = Outgo(parameters["desc"], parameters["cost"], datetime.datetime.utcnow(), parameters["tags"])
-			print str(o)
-			self.base.add_outgo(o)
+			parameters = self.getNewOutgoParameters()
+			self.addOutgoFromParameters(parameters)
 		
 		if "query" in self.argv:
 			#OBTENER LOS PARAMETROS DESDE ARGV
 			o = Outgo()
-			self.base.find_outgo(o)
+			self.base.findOutgo(o)
 
 
-
-	def get_new_outgo_parameters(self):
+	def getNewOutgoParametersFromArguments(self):
 		if "-d" in self.argv and "-c" in self.argv and "-t" in self.argv:
 			parameters={}
 			index_new_outgo_desc = self.argv.index("-d") + 1
@@ -84,6 +79,32 @@ class Program(object):
 		else:
 			print "There are some parameters missing."
 
+	def getNewOutgoParametersFromInput(self):
+		parameters={}
+		parameters["desc"] = raw_input("Description: ")
+		parameters["cost"] = input("Cost: ")
+		string_tags = raw_input("Tags (separated by comma): ")
+		parameters["tags"] = string_tags.split(",")
+		return parameters
+
+	def addOutgoFromParameters(self,parameters):
+		o = Outgo(parameters["desc"], parameters["cost"], datetime.datetime.utcnow(), parameters["tags"])
+		print str(o)
+		self.base.addOutgo(o)
+
+	def startInteraction(self):
+		e = input("Options: \n 1 - Add a new outgo \n 2 - Query \n")
+		if e == 1:
+			parameters = self.getNewOutgoParametersFromInput()
+			self.addOutgoFromParameters(parameters)
+		if e == 2:
+			#DO QUERY
+			o = Outgo()
+			self.base.findOutgo(o)
+		else:
+			print "elegi bien forro"
+
+
 
 
 
@@ -93,9 +114,12 @@ def main():
 	print sys.argv
 
 	if len(sys.argv) > 1:
-		program.parameter_disclaimer()
-		new_outgo_parameters = program.get_new_outgo_parameters()
+		program.parameterDisclaimerFromInput()
+		new_outgo_parameters = program.getNewOutgoParameters()
 		print new_outgo_parameters
+
+	else:
+		program.startInteraction()
 
 
 	print "termina"

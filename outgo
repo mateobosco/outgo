@@ -1,7 +1,8 @@
 outgo
 
-outgo -d "almuerzo, milanesa con ensalada" -c 40 -t almuerzo, comida
-outgo -d "pasajes a concordia" -c 600 -t pasajes,viaje,concordia,anto
+outgo new -d "almuerzo, milanesa con ensalada" -c 40 -t almuerzo, comida
+outgo new -d "pasajes a concordia" -c 600 -t "pasajes,viaje,concordia,anto"
+outgo query -t comida
 
 
 Gasto:
@@ -13,3 +14,10 @@ Tag tags[]
 Tag:
 string descripcion
 Tag hijos[]
+
+
+queries posibles:
+gastos y total del mes corriente
+gastos y total de un mes en especial
+busqueda de gastos por tag
+busqueda de gastos por tag y mes

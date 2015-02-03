@@ -1,10 +1,4 @@
 CONFIG.dat
-pymongo
-pymongo/*
-bson/*
-bson
-flask/*
-flask
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

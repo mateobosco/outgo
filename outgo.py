@@ -20,7 +20,7 @@ class Outgo(object):
 		self.desc = desc
 		self.cost = cost
 		if (date): self.date = date
-		else: self.date =  datetime.datetime.utcnow()
+		else: self.date =  datetime.datetime.today()
 		self.tags = tags
 
 	def __str__(self):
@@ -63,6 +63,9 @@ class Base(object):
 
 	def findAll(self):
 		return self.db.outgoes.find()
+
+	def findFromDate(self,start, end):
+		return self.db.outgoes.find({'date': {'$gte': start, '$lt': end}})
 
 
 

@@ -4,6 +4,9 @@ CONFIG.dat
 __pycache__/
 *.py[cod]
 
+venv
+*.pyc
+
 # C extensions
 *.so
 

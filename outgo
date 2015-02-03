@@ -24,7 +24,11 @@ busqueda de gastos por tag y mes
 
 
 
-curl -i -H "Content-Type: application/json" -X POST -d '{"description": "gasto desde POST","tags": ["caca","mas caca","comida"], "cost": 34}' http://localhost:5000/api/v1.0/outgo
+curl -i -H "Content-Type: application/json" -X POST -d "{"description": "gasto desde POST","tags": ["caca","mas caca","comida"], "cost": 34}' http://localhost:5000/api/v1.0/outgo
 
 
 curl -i http://localhost:5000/api/v1.0/outgo/get_outgo_by_id/54d0048ba731e212cae70e7a
+
+
+curl -i http://localhost:5000/api/v1.0/outgo/get_outgoes_by_date?start='{"hour":16,"month":2,"second":32,"microsecond":21916,"year":2015,"day":3,"minute":18}'&end='{"hour":16,"month":2,"second":21,"microsecond":940199,"year":2015,"day":3,"minute":19}'
+

@@ -31,9 +31,6 @@ def create_outgo():
         'tags': request.json.get('tags', [])
     }
     outgo_id = base.addOutgo(model.createOutgoFromDic(outgo_dic))
-    # outgo_dic['_id'] = base.addOutgo(createOutgoFromDic(outgo_dic)
-    # outgo_dic.update('_id':outgo_id)
-    print type(outgo_dic)
     return jsonify( { 'outgo': make_public_outgo(outgo_dic) } ), 201
 
 if __name__ == '__main__':

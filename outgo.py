@@ -2,6 +2,16 @@ import pymongo
 import datetime
 import sys
 import re
+import json
+
+
+def createOutgoFromJson(json):
+	dic = json.loads(json)
+	return createOutgoFromDic(dic)
+
+def createOutgoFromDic(dic):
+	outgo = Outgo(dic.get("description") , dic.get("cost") , dic.get("date") , dic.get("tags"))
+	return outgo
 
 
 class Outgo(object):
@@ -9,7 +19,8 @@ class Outgo(object):
 	def __init__(self,desc,cost,date,tags):
 		self.desc = desc
 		self.cost = cost
-		self.date = date
+		if (date): self.date = date
+		else: self.date =  datetime.datetime.utcnow()
 		self.tags = tags
 
 	def __str__(self):
@@ -42,7 +53,7 @@ class Base(object):
 		return line.split(',')
 
 	def addOutgo(self,outgo):
-		self.db.outgoes.insert(outgo.toDic())
+		return self.db.outgoes.insert(outgo.toDic())
 
 	def findOutgo(self,outgo):
 		return self.db.outgoes.find_one(outgo.toDic())
@@ -127,4 +138,4 @@ def main():
 		program.startInteraction()
 
 
-main()
+# main()

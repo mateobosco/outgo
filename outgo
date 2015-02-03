@@ -21,3 +21,7 @@ gastos y total del mes corriente
 gastos y total de un mes en especial
 busqueda de gastos por tag
 busqueda de gastos por tag y mes
+
+
+
+curl -i -H "Content-Type: application/json" -X POST -d '{"description": "gasto desde POST","tags": ["caca","mas caca","comida"], "cost": 34}' http://localhost:5000/api/v1.0/outgo

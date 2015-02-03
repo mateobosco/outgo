@@ -7,18 +7,18 @@ base = model.Base()
 
 @app.route('/')
 def index():
-    base = model.Base()
     return "Hello, World!"
-
 
 def make_public_outgo(outgo):
     new_outgo = {}
     for field in outgo:
         if field == '_id':
-            new_outgo['uri'] = url_for('get_outgo', outgo_id = outgo['_id'], _external = True)
+            new_outgo['uri'] = url_for('get_outgo_by_id', outgo_id = outgo['_id'], _external = True)
         else:
             new_outgo[field] = outgo[field]
     return new_outgo
+
+############################CREATE OUTGO################################
 
 @app.route('/api/v1.0/outgoes', methods = ['POST'])
 def create_outgo():
@@ -32,6 +32,35 @@ def create_outgo():
     }
     outgo_id = base.addOutgo(model.createOutgoFromDic(outgo_dic))
     return jsonify( { 'outgo': make_public_outgo(outgo_dic) } ), 201
+
+
+########################################################################
+
+
+
+###########################GET OUTGO###################################
+
+@app.route('/api/v1.0/outgo/get_outgo_by_id/<string:outgo_id>', methods = ['GET'])
+def get_outgo_by_id(outgo_id):
+    outgo = base.findById(outgo_id)
+    if not outgo: abort(404)
+    return jsonify( { 'outgo': make_public_outgo(outgo) } )
+
+#######################################################################
+
+
+###########################GET ALL OUTGO###################################
+
+@app.route('/api/v1.0/outgo/get_outgoes', methods = ['GET'])
+def get_outgoes():
+    print "holi"
+    outgoes = base.findAll()
+    if not outgoes: abort(404)
+    return jsonify( { 'outgoes': map(make_public_outgo, outgoes) } )
+
+
+#######################################################################
+
 
 if __name__ == '__main__':
     app.run(debug=True)

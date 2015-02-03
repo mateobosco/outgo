@@ -3,7 +3,7 @@ import datetime
 import sys
 import re
 import json
-
+from bson.objectid import ObjectId
 
 def createOutgoFromJson(json):
 	dic = json.loads(json)
@@ -57,6 +57,13 @@ class Base(object):
 
 	def findOutgo(self,outgo):
 		return self.db.outgoes.find_one(outgo.toDic())
+
+	def findById(self,id):
+		return self.db.outgoes.find_one({'_id':ObjectId(id)})
+
+	def findAll(self):
+		return self.db.outgoes.find()
+
 
 
 

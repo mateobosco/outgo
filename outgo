@@ -25,3 +25,6 @@ busqueda de gastos por tag y mes
 
 
 curl -i -H "Content-Type: application/json" -X POST -d '{"description": "gasto desde POST","tags": ["caca","mas caca","comida"], "cost": 34}' http://localhost:5000/api/v1.0/outgo
+
+
+curl -i http://localhost:5000/api/v1.0/outgo/get_outgo_by_id/54d0048ba731e212cae70e7a

@@ -37,6 +37,10 @@ class Outgo(object):
 		dic["tags"] = self.tags
 		return dic
 
+	def isValid(self):
+		if self.desc and self.cost and self.tags: return True
+		else: return False
+
 
 
 class Base(object):
@@ -53,7 +57,8 @@ class Base(object):
 		return line.split(',')
 
 	def addOutgo(self,outgo):
-		return self.db.outgoes.insert(outgo.toDic())
+		if outgo.isValid(): return self.db.outgoes.insert(outgo.toDic())
+		else: return None
 
 	def findOutgo(self,outgo):
 		return self.db.outgoes.find_one(outgo.toDic())
@@ -76,6 +81,9 @@ class Base(object):
 			value.append({"tags":tag})
 		query = {"$and":value}
 		return self.db.outgoes.find(query)
+
+	def updateById(self,outgo):
+		self.db.outgoes.update({'_id':ObjectId(outgo["_id"])},outgo)
 
 
 

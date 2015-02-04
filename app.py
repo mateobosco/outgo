@@ -14,6 +14,14 @@ app.url_map.converters['list'] = ListConverter
 def index():
     return "Hello, World!"
 
+@app.errorhandler(400)
+def not_found(error):
+    return make_response(jsonify( { 'error': 'Bad request' } ), 400)
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify( { 'error': 'Not found' } ), 404)
+
 def make_public_outgo(outgo):
     new_outgo = {}
     for field in outgo:
@@ -55,7 +63,8 @@ def create_outgo():
     outgo_dic = {
         'description': request.json['description'],
         'cost': request.json.get('cost'),
-        'tags': request.json.get('tags', [])
+        'tags': request.json.get('tags', []),
+        'date': request.json.get('date',datetime.datetime.now())
     }
     outgo_id = base.addOutgo(model.createOutgoFromDic(outgo_dic))
     return jsonify( { 'outgo': make_public_outgo(outgo_dic) } ), 201
@@ -117,6 +126,29 @@ def get_outgoes_with_tags(tags):
     return jsonify( { 'outgoes': map(make_public_outgo, outgoes) } ) 
 
 ######################################################################
+
+
+@app.route('/api/v1.0/outgoes/<string:outgo_id>', methods = ['PUT'])
+def update_outgo(outgo_id):
+    outgo = base.findById(outgo_id)
+    if not outgo: abort(404)
+    if not request.json: abort(400)
+    if 'cost' in request.json and type(request.json['cost']) != int:
+        abort(400)
+    if 'description' in request.json and type(request.json['description']) is not unicode:
+        abort(400)
+    if 'tags' in request.json and type(request.json['tags']) is not list:
+        abort(400)
+    if 'date' in request.json and type(request.json['tags']) is not datetime.datetime:
+        abort(400)
+
+    outgo['cost'] = request.json.get('cost', outgo['cost'])
+    outgo['description'] = request.json.get('description', outgo['description'])
+    outgo['tags'] = request.json.get('tags', outgo['tags'])
+    outgo['date'] = request.json.get('date', outgo['date'])
+    base.updateById(outgo)
+
+    return jsonify( { 'outgo': make_public_outgo(outgo) } )
 
 if __name__ == '__main__':
     app.run(debug=True)

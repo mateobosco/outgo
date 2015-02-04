@@ -3,6 +3,7 @@ import datetime
 import sys
 import re
 import json
+import os
 from bson.objectid import ObjectId
 
 def createOutgoFromJson(json):
@@ -51,10 +52,11 @@ class Base(object):
 		self.db = self.mongo_client.outgodb
 
 	def getCertificate(self):
-		f = []
-		for line in open("CONFIG.dat"):
-			f.append(line)
-		return line.split(',')
+		#f = []
+		#for line in open("CONFIG.dat"):
+		#	f.append(line)
+		#return line.split(',')
+		return os.environ["MONGOUSER"], os.environ["MONGOPASS"]
 
 	def addOutgo(self,outgo):
 		if outgo.isValid(): return self.db.outgoes.insert(outgo.toDic())

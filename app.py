@@ -3,9 +3,12 @@ from flask import Flask, jsonify, abort, request, make_response, url_for
 import outgo as model
 import json
 import datetime
+from util import ListConverter
+
 
 app = Flask(__name__)
 base = model.Base()
+app.url_map.converters['list'] = ListConverter
 
 @app.route('/')
 def index():
@@ -84,26 +87,17 @@ def get_outgoes():
 
 #######################################################################
 
-############################GET OUTGO BY DATE##############################
+############################GET OUTGO BY DATE##########################
 
-@app.route('/api/v1.0/outgo/get_outgoes_by_date', methods = ['GET'])
-def get_outgoes_from_date():
-    print request.args.keys()
-    print request.args.get("start")
-    print request.args.get("end")
-    json_from = request.args.get("start")
-    json_to = request.args.get("end")
-    #date_from = datetime.datetime.strptime(json_from,"%Y-%m-%d %H:%M:%S.%f")
-    #date_to = datetime.datetime.strptime(json_to,"%Y-%m-%d %H:%M:%S.%f")
-    date_from = json.loads(json_from)
-    date_to = json.loads(json_to)
+@app.route('/api/v1.0/outgo/get_outgoes_by_date/<list:params>', methods = ['GET'])
+def get_outgoes_from_date(params):
+    dic_date_start = json.loads(params[0])
+    dic_date_end = json.loads(params[1])
+    date_start = dic_to_datetime(dic_date_start)
+    date_end = dic_to_datetime(dic_date_end)
+    outgoes = base.findFromDate(date_start,date_end)
+    return jsonify( { 'outgoes': map(make_public_outgo, outgoes) } )
 
-    print date_from
-    print date_to
-    #outgo = base.findById(outgo_id)
-    #if not outgo: abort(404)
-    #return jsonify( { 'outgo': make_public_outgo(outgo) } )
-    return "bla"
 
 
 

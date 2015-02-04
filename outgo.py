@@ -67,6 +67,16 @@ class Base(object):
 	def findFromDate(self,start, end):
 		return self.db.outgoes.find({'date': {'$gte': start, '$lt': end}})
 
+	def findInTags(self, tags):
+		return self.db.outgoes.find({'tags': {"$in": tags}})
+
+	def findWithTags(self, tags):
+		value = []
+		for tag in tags:
+			value.append({"tags":tag})
+		query = {"$and":value}
+		return self.db.outgoes.find(query)
+
 
 
 

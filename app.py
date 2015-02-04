@@ -60,12 +60,10 @@ def create_outgo():
     outgo_id = base.addOutgo(model.createOutgoFromDic(outgo_dic))
     return jsonify( { 'outgo': make_public_outgo(outgo_dic) } ), 201
 
-
 #######################################################################
 
 
-
-###########################GET OUTGO###################################
+###########################GET OUTGO BY ID##############################
 
 @app.route('/api/v1.0/outgo/get_outgo_by_id/<string:outgo_id>', methods = ['GET'])
 def get_outgo_by_id(outgo_id):
@@ -76,7 +74,7 @@ def get_outgo_by_id(outgo_id):
 #######################################################################
 
 
-###########################GET ALL OUTGO###############################
+###########################GET ALL OUTGOES#############################
 
 @app.route('/api/v1.0/outgo/get_outgoes', methods = ['GET'])
 def get_outgoes():
@@ -84,10 +82,10 @@ def get_outgoes():
     if not outgoes: abort(404)
     return jsonify( { 'outgoes': map(make_public_outgo, outgoes) } )
 
-
 #######################################################################
 
-############################GET OUTGO BY DATE##########################
+
+############################GET OUTGOES BY DATE########################
 
 @app.route('/api/v1.0/outgo/get_outgoes_by_date/<list:params>', methods = ['GET'])
 def get_outgoes_from_date(params):
@@ -98,8 +96,27 @@ def get_outgoes_from_date(params):
     outgoes = base.findFromDate(date_start,date_end)
     return jsonify( { 'outgoes': map(make_public_outgo, outgoes) } )
 
+######################################################################
 
 
+############################GET OUTGOES IN TAGS#######################
+
+@app.route('/api/v1.0/outgo/get_outgoes_in_tags/<list:tags>', methods = ['GET'])
+def get_outgoes_in_tags(tags):
+    outgoes = base.findInTags(tags)
+    return jsonify( { 'outgoes': map(make_public_outgo, outgoes) } ) 
+
+######################################################################
+
+
+############################GET OUTGOES WITH TAGS#####################
+
+@app.route('/api/v1.0/outgo/get_outgoes_with_tags/<list:tags>', methods = ['GET'])
+def get_outgoes_with_tags(tags):
+    outgoes = base.findWithTags(tags)
+    return jsonify( { 'outgoes': map(make_public_outgo, outgoes) } ) 
+
+######################################################################
 
 if __name__ == '__main__':
     app.run(debug=True)

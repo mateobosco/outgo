@@ -31,3 +31,8 @@ curl -i http://localhost:5000/api/v1.0/outgo/get_outgo_by_id/54d0048ba731e212cae
 
 
 curl -i http://localhost:5000/api/v1.0/outgo/get_outgoes_by_date/{"hour":16,"month":2,"second":32,"microsecond":21916,"year":2015,"day":3,"minute":18}+{"hour":16,"month":2,"second":21,"microsecond":940199,"year":2015,"day":3,"minute":19}
+
+
+curl -i -H "Content-Type: application/json" -X PUT -d '{"description":"MAGIA"}' http://localhost:5000/api/v1.0/outgoes/54d236d6e4b00a11b540e0e1
+
+curl -i -X DELETE http://localhost:5000/api/v1.0/outgo/54d236d6e4b00a11b540e0e1

@@ -56,7 +56,7 @@ def dic_to_datetime(dic):
 
 ############################CREATE OUTGO###############################
 
-@app.route('/api/v1.0/outgoes', methods = ['POST'])
+@app.route('/api/v1.0/outgo', methods = ['POST'])
 def create_outgo():
     if not request.json or not 'description' in request.json or not 'cost' or not 'tags':
         abort(400)
@@ -128,7 +128,9 @@ def get_outgoes_with_tags(tags):
 ######################################################################
 
 
-@app.route('/api/v1.0/outgoes/<string:outgo_id>', methods = ['PUT'])
+#######################UPDATE OUTGO BY ID#############################
+
+@app.route('/api/v1.0/outgo/<string:outgo_id>', methods = ['PUT'])
 def update_outgo(outgo_id):
     outgo = base.findById(outgo_id)
     if not outgo: abort(404)
@@ -149,6 +151,21 @@ def update_outgo(outgo_id):
     base.updateById(outgo)
 
     return jsonify( { 'outgo': make_public_outgo(outgo) } )
+
+######################################################################
+
+
+#####################DELETE OUTGO BY ID###############################
+
+@app.route('/api/v1.0/outgo/<string:outgo_id>', methods = ['DELETE'])
+def delete_outgo(outgo_id):
+    outgo = base.findById(outgo_id)
+    if not outgo: abort(404)
+    base.removeById(outgo)
+    return jsonify( { 'result': True } )
+
+######################################################################
+
 
 if __name__ == '__main__':
     app.run(debug=True)

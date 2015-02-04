@@ -85,6 +85,9 @@ class Base(object):
 	def updateById(self,outgo):
 		self.db.outgoes.update({'_id':ObjectId(outgo["_id"])},outgo)
 
+	def removeById(self,outgo):
+		self.db.outgoes.remove({'_id' : ObjectId(outgo['_id'])})
+
 
 
 

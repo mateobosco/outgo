@@ -101,6 +101,7 @@ def crossdomain(origin=None, methods=None, headers=None,
 ############################CREATE OUTGO###############################
 
 @app.route('/api/v1.0/outgo', methods = ['POST'])
+@crossdomain(origin='*')
 def create_outgo():
     if not request.json or not 'description' in request.json or not 'cost' or not 'tags':
         abort(400)
@@ -119,6 +120,7 @@ def create_outgo():
 ###########################GET OUTGO BY ID##############################
 
 @app.route('/api/v1.0/outgo/get_outgo_by_id/<string:outgo_id>', methods = ['GET'])
+@crossdomain(origin='*')
 def get_outgo_by_id(outgo_id):
     outgo = base.findById(outgo_id)
     if not outgo: abort(404)
@@ -142,6 +144,7 @@ def get_outgoes():
 ############################GET OUTGOES BY DATE########################
 
 @app.route('/api/v1.0/outgo/get_outgoes_by_date/<list:params>', methods = ['GET'])
+@crossdomain(origin='*')
 def get_outgoes_from_date(params):
     dic_date_start = json.loads(params[0])
     dic_date_end = json.loads(params[1])
@@ -156,6 +159,7 @@ def get_outgoes_from_date(params):
 ############################GET OUTGOES IN TAGS#######################
 
 @app.route('/api/v1.0/outgo/get_outgoes_in_tags/<list:tags>', methods = ['GET'])
+@crossdomain(origin='*')
 def get_outgoes_in_tags(tags):
     outgoes = base.findInTags(tags)
     return jsonify( { 'outgoes': map(make_public_outgo, outgoes) } ) 
@@ -166,6 +170,7 @@ def get_outgoes_in_tags(tags):
 ############################GET OUTGOES WITH TAGS#####################
 
 @app.route('/api/v1.0/outgo/get_outgoes_with_tags/<list:tags>', methods = ['GET'])
+@crossdomain(origin='*')
 def get_outgoes_with_tags(tags):
     outgoes = base.findWithTags(tags)
     return jsonify( { 'outgoes': map(make_public_outgo, outgoes) } ) 
@@ -176,6 +181,7 @@ def get_outgoes_with_tags(tags):
 #######################UPDATE OUTGO BY ID#############################
 
 @app.route('/api/v1.0/outgo/<string:outgo_id>', methods = ['PUT'])
+@crossdomain(origin='*')
 def update_outgo(outgo_id):
     outgo = base.findById(outgo_id)
     if not outgo: abort(404)
@@ -203,6 +209,7 @@ def update_outgo(outgo_id):
 #####################DELETE OUTGO BY ID###############################
 
 @app.route('/api/v1.0/outgo/<string:outgo_id>', methods = ['DELETE'])
+@crossdomain(origin='*')
 def delete_outgo(outgo_id):
     outgo = base.findById(outgo_id)
     if not outgo: abort(404)
